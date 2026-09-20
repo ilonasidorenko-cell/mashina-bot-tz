@@ -16,7 +16,7 @@ OWNER = os.environ.get("ALERT_CHAT_ID", "")
 
 PAGE = """<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>ИИ-ассистент для салона</title>
-<style>body{font-family:sans-serif;max-width:600px;margin:60px auto;padding:20px}
+<style>body{font-family:sans-serif;max-width:600px;padding:20px 0}
 input,textarea{width:100%;padding:10px;margin:6px 0;box-sizing:border-box}
 button{background:#0ea5e9;color:#fff;border:0;padding:12px 24px;cursor:pointer}</style>
 </head><body>
