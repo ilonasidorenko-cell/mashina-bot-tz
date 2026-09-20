@@ -1,0 +1,15 @@
+[Unit]
+Description=Mashina Prodazh (учебная сборка) — Telegram-бот
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/mashina_prodazh
+EnvironmentFile=/etc/solaris/llm.env
+ExecStart=/root/mashina_prodazh/venv/bin/python bot.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

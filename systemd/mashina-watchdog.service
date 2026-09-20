@@ -1,0 +1,8 @@
+[Unit]
+Description=Сторож контура (учебная сборка)
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/mashina_prodazh
+EnvironmentFile=/etc/solaris/llm.env
+ExecStart=/root/mashina_prodazh/venv/bin/python watchdog.py
