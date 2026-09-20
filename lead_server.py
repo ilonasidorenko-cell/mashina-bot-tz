@@ -34,7 +34,7 @@ THANKS = """<!DOCTYPE html><html><head><meta charset="utf-8"></head>
 
 
 def create_card(name, contact, comment, source):
-    desc = "Контакт: " + contact + "\\nКомментарий: " + comment + "\\nИсточник: " + source
+    desc = "Контакт: " + contact + "\nКомментарий: " + comment + "\nИсточник: " + source
     params = urllib.parse.urlencode({
         "key": TRELLO_KEY, "token": TRELLO_TOKEN,
         "idList": TRELLO_LIST_ID, "name": "Лид: " + name, "desc": desc,
@@ -47,8 +47,8 @@ def create_card(name, contact, comment, source):
 
 def notify_owner(name, contact, comment, source):
     if OWNER:
-        bot.send(OWNER, "Новый лид!\\nИмя: " + name + "\\nКонтакт: " + contact +
-                         "\\nКомментарий: " + comment + "\\nИсточник: " + source)
+        bot.send(OWNER, "Новый лид!\nИмя: " + name + "\nКонтакт: " + contact +
+                         "\nКомментарий: " + comment + "\nИсточник: " + source)
 
 
 class Handler(BaseHTTPRequestHandler):
