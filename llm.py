@@ -40,6 +40,8 @@ PROVIDERS = [
      "key": "CEREBRAS_API_KEY", "model": "llama3.1-8b"},
     {"name": "kie", "url": "https://api.kie.ai/claude/v1/messages", "anthropic": True,
      "key": "KIE_AI_API_KEY", "model": "claude-sonnet-4-6"},
+    {"name": "ollama", "url": "http://127.0.0.1:11434/v1/chat/completions",
+     "key": "OLLAMA_DUMMY", "model": "qwen2.5:1.5b"},
 ]
 
 

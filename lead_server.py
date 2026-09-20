@@ -26,6 +26,17 @@ button{background:#0ea5e9;color:#fff;border:0;padding:12px 24px;cursor:pointer}<
 <input name="name" placeholder="Ваше имя" required>
 <input name="contact" placeholder="Телефон или Telegram" required>
 <textarea name="comment" placeholder="Задача или вопрос"></textarea>
+<input type="hidden" name="utm_source" id="utm_source">
+<input type="hidden" name="utm_medium" id="utm_medium">
+<input type="hidden" name="utm_campaign" id="utm_campaign">
+<script>
+const p = new URLSearchParams(location.search);
+for (const k of ['utm_source','utm_medium','utm_campaign']) {
+  const el = document.getElementById(k);
+  if (el) el.value = p.get(k) || '';
+}
+</script>
+
 <button type="submit">Оставить заявку</button>
 </form></body></html>"""
 
@@ -33,7 +44,7 @@ THANKS = """<!DOCTYPE html><html><head><meta charset="utf-8"></head>
 <body><h1>Спасибо! Заявка принята.</h1><p>Вернёмся в течение часа.</p></body></html>"""
 
 
-def create_card(name, contact, comment, source):
+def create_card(name, contact, comment, source, utm_source, utm_medium, utm_campaign):
     desc = "Контакт: " + contact + "\nКомментарий: " + comment + "\nИсточник: " + source
     params = urllib.parse.urlencode({
         "key": TRELLO_KEY, "token": TRELLO_TOKEN,
@@ -45,7 +56,7 @@ def create_card(name, contact, comment, source):
         return json.loads(r.read())
 
 
-def notify_owner(name, contact, comment, source):
+def notify_owner(name, contact, comment, source, utm_source, utm_medium, utm_campaign):
     if OWNER:
         bot.send(OWNER, "Новый лид!\nИмя: " + name + "\nКонтакт: " + contact +
                          "\nКомментарий: " + comment + "\nИсточник: " + source)
@@ -65,10 +76,13 @@ class Handler(BaseHTTPRequestHandler):
         name = data.get("name", [""])[0]
         contact = data.get("contact", [""])[0]
         comment = data.get("comment", [""])[0]
+        utm_source = data.get("utm_source", [""])[0]
+        utm_medium = data.get("utm_medium", [""])[0]
+        utm_campaign = data.get("utm_campaign", [""])[0]
         source = self.headers.get("Referer", "прямой заход")
         try:
-            create_card(name, contact, comment, source)
-            notify_owner(name, contact, comment, source)
+            create_card(name, contact, comment, source, utm_source, utm_medium, utm_campaign)
+            notify_owner(name, contact, comment, source, utm_source, utm_medium, utm_campaign)
             llm.log("лид обработан: " + name)
         except Exception as e:
             llm.log("ошибка лида: " + str(e))
