@@ -61,6 +61,17 @@ def handle(msg):
         send(chat_id, "Бот на связи. Напишите вопрос, отвечу через модель. "
                       "Команда /резерв проверит цепочку каналов.")
         return
+    if text.startswith("/отчёт") or text.startswith("/report"):
+        import subprocess
+        up = subprocess.run(["uptime"], capture_output=True, text=True).stdout.strip()
+        st = subprocess.run(["systemctl", "is-active", "mashina-bot"], capture_output=True, text=True).stdout.strip()
+        log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "failover.log")
+        try:
+            tail = "\n".join(open(log_path).read().strip().split("\n")[-3:])
+        except Exception:
+            tail = "лог пуст"
+        send(chat_id, "Отчёт:\nUptime: " + up + "\nСервис: " + st + "\nПоследние строки лога:\n" + tail)
+        return
     if text.startswith("/резерв") or text.startswith("/reserve"):
         ok = llm.selftest()
         send(chat_id, ("РЕЗЕРВ ОК\nЖивые звенья: " + ", ".join(ok)) if len(ok) >= 2
