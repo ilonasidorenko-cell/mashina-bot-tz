@@ -25,6 +25,10 @@ MODEL = os.environ.get("CLAUDE_MODEL", "claude-opus-5")
 
 # Резервная цепочка. Порядок сверху вниз, отключить звено можно, убрав ключ из .env.
 PROVIDERS = [
+    {"name": "ollama", "url": "http://127.0.0.1:11434/v1/chat/completions",
+     "key": "OLLAMA_DUMMY", "model": "qwen2.5:1.5b"},
+    {"name": "ollama_small", "url": "http://127.0.0.1:11434/v1/chat/completions",
+     "key": "OLLAMA_DUMMY", "model": "qwen2.5:0.5b"},
     # Роутер говорит нативным форматом Anthropic (/v1/messages, ключ в x-api-key),
     # остальные вендоры — форматом OpenAI (/chat/completions, ключ в Authorization).
     # Имена моделей у роутера голые, датированные он не знает и отдаёт 404.
@@ -40,8 +44,6 @@ PROVIDERS = [
      "key": "CEREBRAS_API_KEY", "model": "llama3.1-8b"},
     {"name": "kie", "url": "https://api.kie.ai/claude/v1/messages", "anthropic": True,
      "key": "KIE_AI_API_KEY", "model": "claude-sonnet-4-6"},
-    {"name": "ollama", "url": "http://127.0.0.1:11434/v1/chat/completions",
-     "key": "OLLAMA_DUMMY", "model": "qwen2.5:1.5b"},
 ]
 
 
@@ -62,7 +64,7 @@ def ask_cli(prompt, timeout=120):
     return out
 
 
-def ask_http(p, prompt, system, timeout=90):
+def ask_http(p, prompt, system, timeout=10):
     """Одно звено резерва. Формат запроса общий для всех трёх вендоров."""
     key = os.environ.get(p["key"])
     if not key:
@@ -111,7 +113,7 @@ def selftest():
     """Проверка контура: спрашиваем каждое звено и печатаем, кто живой."""
     ok = []
     try:
-        ask_cli("Ответь одним словом: ОК", timeout=90)
+        ask_cli("Ответь одним словом: ОК", timeout=10)
         ok.append("cli")
     except Exception as e:
         print(f"cli: {e}")
