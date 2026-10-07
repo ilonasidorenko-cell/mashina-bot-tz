@@ -32,8 +32,8 @@ PROVIDERS = [
     # Роутер говорит нативным форматом Anthropic (/v1/messages, ключ в x-api-key),
     # остальные вендоры — форматом OpenAI (/chat/completions, ключ в Authorization).
     # Имена моделей у роутера голые, датированные он не знает и отдаёт 404.
-    {"name": "router", "url": "https://cheaprouter.cc/v1/messages", "anthropic": True,
-     "key": "ROUTER_API_KEY", "model": os.environ.get("ROUTER_MODEL", "claude-sonnet-4-6")},
+    {"name": "router", "url": "https://router.cheap/v1/messages", "anthropic": True,
+     "key": "ANTHROPIC_API_KEY", "model": os.environ.get("ROUTER_MODEL", "claude-sonnet-4-6")},
     {"name": "groq", "url": "https://api.groq.com/openai/v1/chat/completions",
      "key": "GROQ_API_KEY", "model": os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")},
     {"name": "deepseek", "url": "https://api.deepseek.com/chat/completions",
