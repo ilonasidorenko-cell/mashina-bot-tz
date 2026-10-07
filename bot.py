@@ -47,7 +47,7 @@ def send_voice(chat_id, voice_file_id):
         oga = tempfile.mktemp(suffix=".oga")
         mp3 = tempfile.mktemp(suffix=".mp3")
         urllib.request.urlretrieve(url, oga)
-        subprocess.run(["ffmpeg", "-y", "-i", oga, mp3], capture_output=True)
+        subprocess.run(["ffmpeg", "-y", "-i", oga, "-ar", "16000", "-ac", "1", "-af", "volume=2.0", mp3], capture_output=True)
         groq_key = os.environ.get("GROQ_API_KEY", "")
         with open(mp3, "rb") as f:
             boundary = "----boundary"
@@ -58,7 +58,13 @@ def send_voice(chat_id, voice_file_id):
             body += f.read() + b"\r\n"
             body += f"--{boundary}\r\n".encode()
             body += b'Content-Disposition: form-data; name="model"\r\n\r\n'
-            body += b"whisper-large-v3-turbo\r\n"
+            body += b"whisper-large-v3\r\n"
+            body += f"--{boundary}\r\n".encode()
+            body += b'Content-Disposition: form-data; name="language"\r\n\r\n'
+            body += b"ru\r\n"
+            body += f"--{boundary}\r\n".encode()
+            body += b'Content-Disposition: form-data; name="prompt"\r\n\r\n'
+            body += "матовый глянцевый сатин потолок площадь".encode() + b"\r\n"
             body += f"--{boundary}--\r\n".encode()
         req = urllib.request.Request(
             "https://api.groq.com/openai/v1/audio/transcriptions",
